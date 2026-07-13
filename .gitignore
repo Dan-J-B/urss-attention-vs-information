@@ -1,0 +1,15 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# And Poetry's local virtual environment
+.venv/
+.poetry/
+
+# Also not necessary to track CS code settings.
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
