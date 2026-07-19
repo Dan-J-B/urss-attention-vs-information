@@ -19,7 +19,7 @@ When this definition becomes untenable (or suffers from informational redundancy
 1) **Surprisal**: Surprisal is a measure of how unexpected a token is given the context. It is defined as the negative logarithm of the probability of the token given the context, which will be according to a model's learned distribution in this case. Shannon entropy is the expected value of surprisal, so we can expect that surprisal will be a good proxy for information content as long as the model's learned distribution is a good approximation of the true distribution.
 
 2) **Positive Pointwise Mutual Information (PPMI)**: PPMI is a measure of association between two events, in this case, two tokens. It is defined as follows:
-$$ PPMI(X_t;X_{t-k}) = \max\left(0, \log\frac{P(X_t,X_{t-k})}{P(X_t)P(X_{t-k})}\right) $$
+$$ PPMI(X_t;X_{t-k}) = \max(0, \log(\frac{P(X_t,X_{t-k})}{P(X_t)P(X_{t-k})})) $$
 
 Where $P(X_t,X_{t-k})$ is the joint probability of the two tokens, approximated via their co-occurrence in the dataset, and $P(X_t)$ and $P(X_{t-k})$ are the marginal probabilities of the two tokens, also approximated via their occurrence in the dataset. PPMI is a measure of how much more likely the two tokens are to occur together than would be expected if they were independent, and can be considered a proxy for mutual information between the two tokens.
 
