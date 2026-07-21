@@ -14,14 +14,20 @@ def reverse_sequence(sequence: list[int]) -> str:
     reversed_sequence = concatenated_sequence[::-1]
     return reversed_sequence
 
-def generate_fib_datapoint(a: int, b: int, n: int) -> tuple[str, bool]: #type: ignore
-    fib_sequence = generate_fib_sequence(a, b, n)
-    return (','.join(str(num) for num in fib_sequence), False)
+def big_to_little_endian(num: int) -> int:
+    characters = str(num)
+    little_endian_characters = characters[::-1]
+    return int(little_endian_characters)
 
-def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> tuple[str, bool]: 
+def generate_little_endian_fib_datapoint(a: int, b: int, n: int) -> tuple[str, str]:
+    fib_sequence = generate_fib_sequence(a, b, n)
+    little_endian_sequence = [big_to_little_endian(num) for num in fib_sequence]
+    return (','.join(str(num) for num in little_endian_sequence), "forward")
+
+def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> tuple[str, str]: 
     fib_sequence = generate_fib_sequence(a, b, n)
     reversed_fib_sequence = reverse_sequence(fib_sequence)
-    return (reversed_fib_sequence, True)
+    return (reversed_fib_sequence, "reverse")
 
 def generate_modular_fib_sequence(a: int, b: int, n: int, mod: int) -> list[int]:
     sequence = [a % mod, b % mod]
