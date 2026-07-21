@@ -14,10 +14,14 @@ def reverse_sequence(sequence: list[int]) -> str:
     reversed_sequence = concatenated_sequence[::-1]
     return reversed_sequence
 
-def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> str:
+def generate_fib_datapoint(a: int, b: int, n: int) -> tuple[str, bool]: #type: ignore
+    fib_sequence = generate_fib_sequence(a, b, n)
+    return (','.join(str(num) for num in fib_sequence), False)
+
+def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> tuple[str, bool]: 
     fib_sequence = generate_fib_sequence(a, b, n)
     reversed_fib_sequence = reverse_sequence(fib_sequence)
-    return reversed_fib_sequence
+    return (reversed_fib_sequence, True)
 
 def generate_modular_fib_sequence(a: int, b: int, n: int, mod: int) -> list[int]:
     sequence = [a % mod, b % mod]

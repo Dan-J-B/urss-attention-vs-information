@@ -1,0 +1,47 @@
+from dataclasses import dataclass
+from typing import Literal
+
+Mode = Literal["forward", "reverse"]
+
+@dataclass(frozen=True)
+class CharacterTokeniser:
+    vocab: dict[str, int]
+    inverse_vocab: dict[int, str]
+    pad_token: str = "<pad>"
+    bos_token: str = "<bos>"
+    eos_token: str = "<eos>"
+    reverse_token: str = "<rev>"
+    forward_token: str = "<fwd>"
+
+    @classmethod
+    def build(cls) -> "CharacterTokeniser":
+        tokens = ["<pad>", "<bos>", "<eos>", "<rev>", "<fwd>", ",", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        vocab = {token: index for index, token in enumerate(tokens)}
+        inverse_vocab = {index: token for token, index in vocab.items()}
+        return cls(vocab=vocab, inverse_vocab=inverse_vocab)
+
+    def encode(self, text: str, mode: Mode, add_special_tokens: bool = True) -> list[int]:
+        token_ids = [self.vocab[self.forward_token] if mode == "forward" else self.vocab[self.reverse_token]]
+
+        if add_special_tokens:
+            token_ids.append(self.vocab[self.bos_token])
+
+        for character in text:
+            if character not in self.vocab:
+                raise ValueError(f"Unknown character: {character}")
+            token_ids.append(self.vocab[character])
+
+        if add_special_tokens:
+            token_ids.append(self.vocab[self.eos_token])
+
+        return token_ids
+
+    def decode(self, token_ids: list[int], skip_special_tokens: bool = True) -> str:
+        special_tokens = {self.pad_token, self.bos_token, self.eos_token, self.reverse_token, self.forward_token}
+        characters = []
+        for token_id in token_ids:
+            character = self.inverse_vocab[token_id]
+            if skip_special_tokens and character in special_tokens:
+                continue
+            characters.append(character) #type: ignore
+        return "".join(characters) #type: ignore
