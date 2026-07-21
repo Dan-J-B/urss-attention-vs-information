@@ -19,6 +19,13 @@ def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> str:
     reversed_fib_sequence = reverse_sequence(fib_sequence)
     return reversed_fib_sequence
 
+def generate_modular_fib_sequence(a: int, b: int, n: int, mod: int) -> list[int]:
+    sequence = [a % mod, b % mod]
+    for i in range(2, n):
+        next_value = fib_next(sequence[i - 2], sequence[i - 1]) % mod
+        sequence.append(next_value)
+    return sequence
+
 # Synthetic Data Generation for Markov Chains
 import random
 
