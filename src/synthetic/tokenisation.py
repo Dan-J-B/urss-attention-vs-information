@@ -45,3 +45,43 @@ class CharacterTokeniser:
                 continue
             characters.append(character) #type: ignore
         return "".join(characters) #type: ignore
+    
+@dataclass(frozen=True)
+class DiscreteTokeniser:
+    vocab: dict[str, int]
+    inverse_vocab: dict[int, str]
+    pad_token: str = "<pad>"
+    bos_token: str = "<bos>"
+    eos_token: str = "<eos>"
+
+    @classmethod
+    def build_from_symbols(cls, symbols: list[str]) -> "DiscreteTokeniser":
+        tokens = [cls.pad_token, cls.bos_token, cls.eos_token, *symbols]
+        vocab = {token: index for index, token in enumerate(tokens)}
+        inverse_vocab = {index: token for token, index in vocab.items()}
+        return cls(vocab=vocab, inverse_vocab=inverse_vocab)
+    
+    def encode(self, symbols: list[str], add_special_tokens: bool = True) -> list[int]:
+        token_ids = []
+        if add_special_tokens:
+            token_ids.append(self.vocab[self.bos_token])
+        
+        for symbol in symbols:
+            if symbol not in self.vocab:
+                raise ValueError(f"Unknown symbol: {symbol}")
+            token_ids.append(self.vocab[symbol])
+        
+        if add_special_tokens:
+            token_ids.append(self.vocab[self.eos_token])
+        
+        return token_ids
+    
+    def decode(self, token_ids: list[int], skip_special_tokens: bool = True) -> list[str]:
+        special_tokens = {self.pad_token, self.bos_token, self.eos_token}
+        symbols = []
+        for token_id in token_ids:
+            symbol = self.inverse_vocab[token_id]
+            if skip_special_tokens and symbol in special_tokens:
+                continue
+            symbols.append(symbol)
+        return symbols
