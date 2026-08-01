@@ -3,6 +3,7 @@ from typing import Literal
 
 Mode = Literal["forward", "reverse"]
 
+# Dataclass defining tokenisation methods for forwards and reverse little-endian Fibonacci sequences
 @dataclass(frozen=True)
 class CharacterTokeniser:
     vocab: dict[str, int]
@@ -45,7 +46,8 @@ class CharacterTokeniser:
                 continue
             characters.append(character) #type: ignore
         return "".join(characters) #type: ignore
-    
+
+# Dataclass defining tokenisation methods for the 'discrete' sequences (markov chains and modular Fibonacci sequences)
 @dataclass(frozen=True)
 class DiscreteTokeniser:
     vocab: dict[str, int]
@@ -55,12 +57,20 @@ class DiscreteTokeniser:
     eos_token: str = "<eos>"
 
     @classmethod
-    def build_from_symbols(cls, symbols: list[str]) -> "DiscreteTokeniser":
+    def build_tokeniser_for_markov_chains(cls, symbols: list[str]) -> "DiscreteTokeniser":
         tokens = [cls.pad_token, cls.bos_token, cls.eos_token, *symbols]
         vocab = {token: index for index, token in enumerate(tokens)}
         inverse_vocab = {index: token for token, index in vocab.items()}
         return cls(vocab=vocab, inverse_vocab=inverse_vocab)
-    
+
+    @classmethod
+    def build_tokeniser_for_modular_sequences(cls, mod: int) -> "DiscreteTokeniser":
+        symbols : list[str] = list(map(str, range(mod)))
+        tokens = [cls.pad_token, cls.bos_token, cls.eos_token, *symbols]
+        vocab = {token: index for index, token in enumerate(tokens)}
+        inverse_vocab = {index: token for token, index in vocab.items()}
+        return cls(vocab=vocab, inverse_vocab=inverse_vocab)
+
     def encode(self, symbols: list[str], add_special_tokens: bool = True) -> list[int]:
         token_ids: list[int] = []
         if add_special_tokens:
