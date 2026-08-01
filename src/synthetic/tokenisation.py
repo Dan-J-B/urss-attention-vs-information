@@ -62,7 +62,7 @@ class DiscreteTokeniser:
         return cls(vocab=vocab, inverse_vocab=inverse_vocab)
     
     def encode(self, symbols: list[str], add_special_tokens: bool = True) -> list[int]:
-        token_ids = []
+        token_ids: list[int] = []
         if add_special_tokens:
             token_ids.append(self.vocab[self.bos_token])
         
@@ -78,7 +78,7 @@ class DiscreteTokeniser:
     
     def decode(self, token_ids: list[int], skip_special_tokens: bool = True) -> list[str]:
         special_tokens = {self.pad_token, self.bos_token, self.eos_token}
-        symbols = []
+        symbols: list[str] = []
         for token_id in token_ids:
             symbol = self.inverse_vocab[token_id]
             if skip_special_tokens and symbol in special_tokens:
