@@ -16,10 +16,10 @@ def reverse_sequence(sequence: list[int]) -> str:
     return reversed_sequence
 
 # Takes a list of integers and returns a string with numeric values in little-endian format, separated by commas
-def big_to_little_endian(num: int) -> int:
+def big_to_little_endian(num: int) -> str:
     characters = str(num)
     little_endian_characters = characters[::-1]
-    return int(little_endian_characters)
+    return little_endian_characters
 
 # Creates a modular Fibonacci sequence, returns a list of integers representing the Fibonacci sequence modulo the given mod value.m
 def generate_modular_fib_sequence(a: int, b: int, n: int, mod: int) -> list[int]:
@@ -44,10 +44,10 @@ def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> tuple[str, str]:
     return (reversed_fib_sequence, "reverse")
 
 # Creates a Fibonacci sequence under a specified modular arithmetic. Outputs a string.
-def generate_modular_fib_datapoint(a: int, b: int, n: int, mod: int) -> str:
+def generate_modular_fib_datapoint(a: int, b: int, n: int, mod: int) -> list[str]:
     modular_fib_sequence = generate_modular_fib_sequence(a, b, n, mod)
     modular_fib_datapoint = ','.join(str(num) for num in modular_fib_sequence)
-    return modular_fib_datapoint
+    return list(modular_fib_datapoint)
 
 # Synthetic Data Generation for Markov Chains
 import random
@@ -62,3 +62,10 @@ def generate_markov_chain(transition_matrix: dict[str, dict[str, float]], initia
         current_state = random.choices(next_states, weights=probabilities)[0]
         chain.append(current_state)
     return chain
+
+# some tests
+
+print(generate_reversed_fib_datapoint(1,1,15))
+print(generate_little_endian_fib_datapoint(1,1,15))
+print(generate_modular_fib_datapoint(1,1,15,10))
+print(generate_markov_chain({'a':{'b':0.1,'c':0.9},'b':{'a':0.5,'b':0.2,'c':0.3},'c':{'a':0,'b':1}},'a',100))
