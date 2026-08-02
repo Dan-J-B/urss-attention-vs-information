@@ -64,7 +64,6 @@ def generate_markov_chain(transition_matrix: dict[str, dict[str, float]], initia
     return chain
 
 # some tests
-
 print(generate_reversed_fib_datapoint(1,1,15))
 print(generate_little_endian_fib_datapoint(1,1,15))
 print(generate_modular_fib_datapoint(1,1,15,10))

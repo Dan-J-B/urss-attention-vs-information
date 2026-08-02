@@ -57,8 +57,8 @@ class DiscreteTokeniser:
     eos_token: str = "<eos>"
 
     @classmethod
-    def build_tokeniser_for_markov_chains(cls, symbols: list[str]) -> "DiscreteTokeniser":
-        tokens = [cls.pad_token, cls.bos_token, cls.eos_token, *symbols]
+    def build_tokeniser_for_markov_chains(cls, chain_states: list[str]) -> "DiscreteTokeniser":
+        tokens = [cls.pad_token, cls.bos_token, cls.eos_token, *chain_states]
         vocab = {token: index for index, token in enumerate(tokens)}
         inverse_vocab = {index: token for token, index in vocab.items()}
         return cls(vocab=vocab, inverse_vocab=inverse_vocab)
