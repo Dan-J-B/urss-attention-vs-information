@@ -26,7 +26,7 @@ def make_reversed_fib_training_target_pair(a: int, b: int, n: int):
         n: number of terms to produce in Fibonacci sequence
     """
     datapoint = generate_reversed_fib_datapoint(a, b, n)[0]
-    tokenised_datapoint = CharacterTokeniser.encode(self = CharacterTokeniser.build(), mode = "forward", text=datapoint)
+    tokenised_datapoint = CharacterTokeniser.encode(self = CharacterTokeniser.build(), mode = "reverse", text=datapoint)
     input = tokenised_datapoint[:-1]
     output = tokenised_datapoint[1:]
     training_target_pair = [input, output]

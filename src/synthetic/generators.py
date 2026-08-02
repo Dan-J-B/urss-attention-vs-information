@@ -46,8 +46,8 @@ def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> tuple[str, str]:
 # Creates a Fibonacci sequence under a specified modular arithmetic. Outputs a string.
 def generate_modular_fib_datapoint(a: int, b: int, n: int, mod: int) -> list[str]:
     modular_fib_sequence = generate_modular_fib_sequence(a, b, n, mod)
-    modular_fib_datapoint = ','.join(str(num) for num in modular_fib_sequence)
-    return list(modular_fib_datapoint)
+    modular_fib_datapoint = [str(num) for num in modular_fib_sequence]
+    return modular_fib_datapoint
 
 # Synthetic Data Generation for Markov Chains
 import random
