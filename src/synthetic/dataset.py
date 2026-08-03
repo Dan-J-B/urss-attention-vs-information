@@ -1,5 +1,8 @@
 from tokenisation import CharacterTokeniser, DiscreteTokeniser
 from generators import generate_little_endian_fib_datapoint, generate_modular_fib_datapoint, generate_reversed_fib_datapoint, generate_markov_chain
+import torch
+from torch.utils.data import Dataset
+from torch.nn.utils.rnn import pad_sequence
 
 #---Character-Wise vocabulary training target pair generation functions---
 def make_little_endian_fib_target_train_pair(a: int,b: int, n:int):
@@ -64,3 +67,45 @@ def make_markov_chain_training_target_pair(transition_matrix: dict[str, dict[str
     output = tokenised_datapoint[1:]
     training_target_pair = [input, output]
     return training_target_pair
+
+class LittleEndianFibDataset(Dataset[dict[str,torch.Tensor]]):
+    pairs: list[tuple[int,int]]
+    def __init__(self, pairs: list[tuple[int, int]], n: int, tokeniser: CharacterTokeniser) -> None:
+        self.pairs = pairs
+        self.n = n
+        self.tokeniser = tokeniser
+
+    def __len__(self) -> int: 
+        return len(self.pairs)
+
+    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
+        a, b = self.pairs[idx]
+        text, mode = generate_little_endian_fib_datapoint(a, b, self.n)
+        token_ids = self.tokeniser.encode(text=text, mode=mode)
+        input_ids = token_ids[:-1]
+        target_ids = token_ids[1:]
+
+        return {
+            "input_ids": torch.tensor(input_ids, dtype=torch.long),
+            "target_ids": torch.tensor(target_ids, dtype=torch.long),
+        }
+
+def collate_little_endian_batch(samples: list[dict[str, torch.Tensor]]) -> dict[str, torch.Tensor]: 
+    input_ids = pad_sequence(
+        [sample["input_ids"] for sample in samples],
+        batch_first=True,
+        padding_value=0,
+    )
+    target_ids = pad_sequence(
+        [sample["target_ids"] for sample in samples],
+        batch_first=True,
+        padding_value=-100,
+    )
+
+    attention_mask = (input_ids != 0).long()
+
+    return {
+        "input_ids": input_ids,
+        "target_ids": target_ids,
+        "attention_mask": attention_mask,
+    }

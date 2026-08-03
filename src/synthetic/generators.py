@@ -1,3 +1,4 @@
+from typing import Literal
 #---Helper functions---
 def fib_next(a: int, b: int) -> int:
     return a + b
@@ -32,13 +33,13 @@ def generate_modular_fib_sequence(a: int, b: int, n: int, mod: int) -> list[int]
 #---Synthetic Datapoint generating functions---
 
 # Creates a little-endian Fibonacci sequence data point ready for tokenisation, returns a tuple with the sequence string at index 0 and the direction 'forward' at index 1
-def generate_little_endian_fib_datapoint(a: int, b: int, n: int) -> tuple[str, str]:
+def generate_little_endian_fib_datapoint(a: int, b: int, n: int) -> tuple[str, Literal["forward"]]:
     fib_sequence = generate_fib_sequence(a, b, n)
     little_endian_sequence = [big_to_little_endian(num) for num in fib_sequence]
     return (','.join(str(num) for num in little_endian_sequence), "forward")
 
 # Creates a reversed Fibonacci sequence data point ready for tokenisation, returns a tuple with the sequence string at index 0 and the direction 'reverse' at index 1. Note again that this sequence is in little-endian format, as it was reversed character-wise. 
-def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> tuple[str, str]: 
+def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> tuple[str, Literal["reverse"]]: 
     fib_sequence = generate_fib_sequence(a, b, n)
     reversed_fib_sequence = reverse_sequence(fib_sequence)
     return (reversed_fib_sequence, "reverse")
