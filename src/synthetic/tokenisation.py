@@ -13,10 +13,11 @@ class CharacterTokeniser:
     eos_token: str = "<eos>"
     reverse_token: str = "<rev>"
     forward_token: str = "<fwd>"
+    width_token: str = "$"
 
     @classmethod
     def build(cls) -> "CharacterTokeniser":
-        tokens = ["<pad>", "<bos>", "<eos>", "<rev>", "<fwd>", ",", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        tokens = ["<pad>", "<bos>", "<eos>", "$", "<rev>", "<fwd>", ",", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         vocab = {token: index for index, token in enumerate(tokens)}
         inverse_vocab = {index: token for token, index in vocab.items()}
         return cls(vocab=vocab, inverse_vocab=inverse_vocab)
@@ -38,7 +39,7 @@ class CharacterTokeniser:
         return token_ids
 
     def decode(self, token_ids: list[int], skip_special_tokens: bool = True) -> str:
-        special_tokens = {self.pad_token, self.bos_token, self.eos_token, self.reverse_token, self.forward_token}
+        special_tokens = {self.pad_token, self.bos_token, self.eos_token, self.reverse_token, self.forward_token, self.width_token}
         characters = []
         for token_id in token_ids:
             character = self.inverse_vocab[token_id]

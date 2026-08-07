@@ -10,11 +10,14 @@ def generate_fib_sequence(a: int, b: int, n: int) -> list[int]:
         sequence.append(next_value)
     return sequence
 
+def pad_terms_to_width(sequence: list[str], width: int, pad_char: str = "$") -> list[str]:
+    return [term.ljust(width, pad_char) for term in sequence]
+
 # Takes a list of integers and returns a string representation of the sequence reversed character-wise, meaning all big-endian numbers become little-endian and the sequence order is also reversed. Outputs a string with numeric values separated by commas
-def reverse_sequence(sequence: list[int]) -> str:
+def reverse_sequence(sequence: list[int]) -> list[str]:
     concatenated_sequence = ','.join(str(num) for num in sequence)
     reversed_sequence = concatenated_sequence[::-1]
-    return reversed_sequence
+    return reversed_sequence.split(",")
 
 # Takes a list of integers and returns a string with numeric values in little-endian format, separated by commas
 def big_to_little_endian(num: int) -> str:
@@ -36,13 +39,15 @@ def generate_modular_fib_sequence(a: int, b: int, n: int, mod: int) -> list[int]
 def generate_little_endian_fib_datapoint(a: int, b: int, n: int) -> tuple[str, Literal["forward"]]:
     fib_sequence = generate_fib_sequence(a, b, n)
     little_endian_sequence = [big_to_little_endian(num) for num in fib_sequence]
-    return (','.join(str(num) for num in little_endian_sequence), "forward")
+    padded_sequence = pad_terms_to_width(little_endian_sequence, width = 3)
+    return (','.join(padded_sequence), "forward")
 
 # Creates a reversed Fibonacci sequence data point ready for tokenisation, returns a tuple with the sequence string at index 0 and the direction 'reverse' at index 1. Note again that this sequence is in little-endian format, as it was reversed character-wise. 
 def generate_reversed_fib_datapoint(a: int, b: int, n: int) -> tuple[str, Literal["reverse"]]: 
     fib_sequence = generate_fib_sequence(a, b, n)
     reversed_fib_sequence = reverse_sequence(fib_sequence)
-    return (reversed_fib_sequence, "reverse")
+    padded_sequence = pad_terms_to_width(reversed_fib_sequence, width = 3)
+    return (','.join(padded_sequence), "reverse")
 
 # Creates a Fibonacci sequence under a specified modular arithmetic. Outputs a string.
 def generate_modular_fib_datapoint(a: int, b: int, n: int, mod: int) -> list[str]:
