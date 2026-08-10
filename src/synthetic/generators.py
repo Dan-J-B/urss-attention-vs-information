@@ -1,4 +1,5 @@
 from typing import Literal
+
 #---Helper functions---
 def fib_next(a: int, b: int) -> int:
     return a + b
@@ -25,7 +26,7 @@ def big_to_little_endian(num: int) -> str:
     little_endian_characters = characters[::-1]
     return little_endian_characters
 
-# Creates a modular Fibonacci sequence, returns a list of integers representing the Fibonacci sequence modulo the given mod value.m
+# Creates a modular Fibonacci sequence, returns a list of integers representing the Fibonacci sequence modulo the given mod value
 def generate_modular_fib_sequence(a: int, b: int, n: int, mod: int) -> list[int]:
     sequence = [a % mod, b % mod]
     for i in range(2, n):

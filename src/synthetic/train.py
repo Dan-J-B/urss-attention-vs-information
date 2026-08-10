@@ -15,11 +15,11 @@ def main() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     tokeniser = CharacterTokeniser.build()
-    pairs = list(itertools.combinations_with_replacement(range(1,3),2))
+    pairs = list(itertools.combinations_with_replacement(range(1,10),2))
 
     dataset = LittleEndianFibDataset(
         pairs=pairs,
-        n=5,
+        n=6,
         tokeniser=tokeniser
     )
 
@@ -44,7 +44,7 @@ def main() -> None:
     model = TinyCausalTransformer(
         vocab_size=len(tokeniser.vocab),
         max_seq_len=128,
-        d_model=512,
+        d_model=256,
         n_layers=2,
         n_heads=4,
         d_hidden=512,
@@ -59,7 +59,7 @@ def main() -> None:
 
     best_val_loss = float("inf")
 
-    for epoch in range(12000):
+    for epoch in range(8000):
         train_loss = train_one_epoch(model, train_loader, loss_fn, optimiser, device)
         val_loss = evaluate(model, val_loader, loss_fn, device)
 
@@ -73,7 +73,7 @@ def main() -> None:
                     "train_loss": train_loss,
                     "val_loss": val_loss,
                 },
-                checkpoint_dir / "best.pt",
+                checkpoint_dir / "lit_end_fib_fwd.pt",
             )
 
         print(f"epoch={epoch} train_loss={train_loss:.4f} val_loss={val_loss:.4f}")
