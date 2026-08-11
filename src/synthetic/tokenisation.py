@@ -78,12 +78,12 @@ class DiscreteTokeniser:
         inverse_vocab = {index: token for token, index in vocab.items()}
         return cls(vocab=vocab, inverse_vocab=inverse_vocab)
 
-    def encode(self, symbols: list[str], add_special_tokens: bool = True) -> list[int]:
+    def encode(self, sequence: list[str], add_special_tokens: bool = True) -> list[int]:
         token_ids: list[int] = []
         if add_special_tokens:
             token_ids.append(self.vocab[self.bos_token])
         
-        for symbol in symbols:
+        for symbol in sequence:
             if symbol not in self.vocab:
                 raise ValueError(f"Unknown symbol: {symbol}")
             token_ids.append(self.vocab[symbol])
